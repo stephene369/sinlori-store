@@ -6,12 +6,13 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from .models import Categorie, SousCategorie, Produit, ConfigurationSite
-from .forms import CategorieForm, SousCategorieForm, ProduitForm, SiteConfigForm
+from .forms import CategorieForm, SousCategorieForm, ProduitForm, ConfigurationSiteForm
 
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff
 
+# Vue de connexion admin
 # Vue de connexion admin
 def admin_login(request):
     if request.user.is_authenticated and request.user.is_staff:
@@ -28,7 +29,8 @@ def admin_login(request):
         else:
             messages.error(request, 'Identifiants incorrects ou accès non autorisé')
     
-    return render(request, 'admin/login.html')
+    return render(request, 'admin/login_.html')
+
 
 # Déconnexion admin
 @user_passes_test(is_admin)
@@ -268,16 +270,16 @@ def admin_site_config(request):
     
     if request.method == 'POST':
         if config:
-            form = SiteConfigForm(request.POST, request.FILES, instance=config)
+            form = ConfigurationSiteForm(request.POST, request.FILES, instance=config)
         else:
-            form = SiteConfigForm(request.POST, request.FILES)
+            form = ConfigurationSiteForm(request.POST, request.FILES)
         
         if form.is_valid():
             form.save()
             messages.success(request, 'Configuration sauvegardée avec succès!')
             return redirect('admin_site_config')
     else:
-        form = SiteConfigForm(instance=config)
+        form = ConfigurationSiteForm(instance=config)
     
     return render(request, 'admin/site_config.html', {'form': form})
 

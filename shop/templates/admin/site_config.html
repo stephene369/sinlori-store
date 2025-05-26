@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuration - Administration</title>
+    <title>Configuration du site - Administration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script>
@@ -78,7 +78,7 @@
             <!-- Header -->
             <div class="bg-white shadow-sm border-b p-6">
                 <div class="flex items-center justify-between">
-                    <h1 class="text-2xl font-bold text-dark">Configuration du Site</h1>
+                    <h1 class="text-2xl font-bold text-dark">Configuration du site</h1>
                 </div>
             </div>
 
@@ -95,300 +95,411 @@
 
             <!-- Contenu -->
             <div class="p-6">
-                <div class="max-w-4xl mx-auto">
+                <form method="post" enctype="multipart/form-data" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <!-- Informations de base -->
                     <div class="bg-white rounded-xl shadow-lg p-8">
-                        <form method="post" enctype="multipart/form-data" class="space-y-8">
-                            {% csrf_token %}
-                            
-                            <!-- Informations générales -->
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-info-circle mr-2'></i>Informations de base
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
-                                    <i class='bx bx-info-circle mr-2'></i>Informations générales
-                                </h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Nom du site
-                                        </label>
-                                        {{ form.nom_site }}
-                                        {% if form.nom_site.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.nom_site.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Slogan
-                                        </label>
-                                        {{ form.slogan }}
-                                        {% if form.slogan.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.slogan.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="mt-6">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Description
-                                    </label>
-                                    {{ form.description }}
-                                    {% if form.description.errors %}
-                                        <div class="text-red-600 text-sm mt-1">{{ form.description.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-store mr-2'></i>Nom du site
+                                </label>
+                                {{ form.nom_site }}
+                                {% if form.nom_site.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.nom_site.errors.0 }}</div>
+                                {% endif %}
                             </div>
 
-                            <!-- Images -->
                             <div>
-                                <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
-                                    <i class='bx bx-image mr-2'></i>Images
-                                </h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Logo
-                                        </label>
-                                        {{ form.logo }}
-                                        {% if form.logo.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.logo.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-quote-alt-left mr-2'></i>Slogan
+                                </label>
+                                {{ form.slogan }}
+                                {% if form.slogan.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.slogan.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
 
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Favicon
-                                        </label>
-                                        {{ form.favicon }}
-                                        {% if form.favicon.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.favicon.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
+                        <div class="mt-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class='bx bx-text mr-2'></i>Description
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-red-600 text-sm mt-1">{{ form.description.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-phone mr-2'></i>Informations de contact
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-envelope mr-2'></i>Email
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
                             </div>
 
-                            <!-- Contact -->
-                            <!-- Contact -->
                             <div>
-                                <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
-                                    <i class='bx bx-phone mr-2'></i>Informations de contact
-                                </h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Email
-                                        </label>
-                                        {{ form.email }}
-                                        {% if form.email.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.email.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Téléphone
-                                        </label>
-                                        {{ form.telephone }}
-                                        {% if form.telephone.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.telephone.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Téléphone 2
-                                        </label>
-                                        {{ form.telephone_2 }}
-                                        {% if form.telephone_2.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.telephone_2.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            WhatsApp
-                                        </label>
-                                        {{ form.whatsapp }}
-                                        {% if form.whatsapp.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.whatsapp.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="mt-6">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Adresse complète
-                                    </label>
-                                    {{ form.adresse }}
-                                    {% if form.adresse.errors %}
-                                        <div class="text-red-600 text-sm mt-1">{{ form.adresse.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-
-                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Ville
-                                        </label>
-                                        {{ form.ville }}
-                                        {% if form.ville.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.ville.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Code postal
-                                        </label>
-                                        {{ form.code_postal }}
-                                        {% if form.code_postal.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.code_postal.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Pays
-                                        </label>
-                                        {{ form.pays }}
-                                        {% if form.pays.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.pays.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-phone mr-2'></i>Téléphone principal
+                                </label>
+                                {{ form.telephone }}
+                                {% if form.telephone.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.telephone.errors.0 }}</div>
+                                {% endif %}
                             </div>
 
-                            <!-- Réseaux sociaux -->
                             <div>
-                                <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
-                                    <i class='bx bxl-facebook mr-2'></i>Réseaux sociaux
-                                </h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            <i class='bx bxl-facebook mr-1'></i>Facebook
-                                        </label>
-                                        {{ form.facebook }}
-                                        {% if form.facebook.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.facebook.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            <i class='bx bxl-instagram mr-1'></i>Instagram
-                                        </label>
-                                        {{ form.instagram }}
-                                        {% if form.instagram.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.instagram.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            <i class='bx bxl-twitter mr-1'></i>Twitter
-                                        </label>
-                                        {{ form.twitter }}
-                                        {% if form.twitter.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.twitter.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            <i class='bx bxl-linkedin mr-1'></i>LinkedIn
-                                        </label>
-                                        {{ form.linkedin }}
-                                        {% if form.linkedin.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.linkedin.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            <i class='bx bxl-youtube mr-1'></i>YouTube
-                                        </label>
-                                        {{ form.youtube }}
-                                        {% if form.youtube.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.youtube.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            <i class='bx bxl-tiktok mr-1'></i>TikTok
-                                        </label>
-                                        {{ form.tiktok }}
-                                        {% if form.tiktok.errors %}
-                                            <div class="text-red-600 text-sm mt-1">{{ form.tiktok.errors.0 }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-phone mr-2'></i>Téléphone secondaire
+                                </label>
+                                {{ form.telephone_2 }}
+                                {% if form.telephone_2.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.telephone_2.errors.0 }}</div>
+                                {% endif %}
                             </div>
 
-                            <!-- Horaires -->
                             <div>
-                                <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
-                                    <i class='bx bx-time mr-2'></i>Horaires d'ouverture
-                                </h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Lundi</label>
-                                        {{ form.horaires_lundi }}
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Mardi</label>
-                                        {{ form.horaires_mardi }}
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Mercredi</label>
-                                        {{ form.horaires_mercredi }}
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Jeudi</label>
-                                        {{ form.horaires_jeudi }}
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Vendredi</label>
-                                        {{ form.horaires_vendredi }}
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Samedi</label>
-                                        {{ form.horaires_samedi }}
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Dimanche</label>
-                                        {{ form.horaires_dimanche }}
-                                    </div>
-                                </div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-whatsapp mr-2'></i>WhatsApp
+                                </label>
+                                {{ form.whatsapp }}
+                                {% if form.whatsapp.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.whatsapp.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adresse -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-map mr-2'></i>Adresse
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-map-pin mr-2'></i>Adresse complète
+                                </label>
+                                {{ form.adresse }}
+                                {% if form.adresse.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.adresse.errors.0 }}</div>
+                                {% endif %}
                             </div>
 
-                            <!-- À propos -->
-                            <div>
-                                <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
-                                    <i class='bx bx-info-circle mr-2'></i>À propos
-                                </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Texte de présentation
+                                        <i class='bx bx-buildings mr-2'></i>Ville
                                     </label>
-                                    {{ form.a_propos }}
-                                    {% if form.a_propos.errors %}
-                                        <div class="text-red-600 text-sm mt-1">{{ form.a_propos.errors.0 }}</div>
+                                    {{ form.ville }}
+                                    {% if form.ville.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.ville.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-mail-send mr-2'></i>Code postal
+                                    </label>
+                                    {{ form.code_postal }}
+                                    {% if form.code_postal.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.code_postal.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-world mr-2'></i>Pays
+                                    </label>
+                                    {{ form.pays }}
+                                    {% if form.pays.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.pays.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             </div>
 
-                            <div class="flex space-x-4 pt-6">
-                                <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
-                                    <i class='bx bx-save mr-2'></i>
-                                    Sauvegarder la configuration
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-map-alt mr-2'></i>Lien Google Maps
+                                </label>
+                                {{ form.lien_google_maps }}
+                                {% if form.lien_google_maps.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.lien_google_maps.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Réseaux sociaux -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-share-alt mr-2'></i>Réseaux sociaux
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-facebook mr-2'></i>Facebook
+                                </label>
+                                {{ form.facebook }}
+                                {% if form.facebook.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.facebook.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-instagram mr-2'></i>Instagram
+                                </label>
+                                {{ form.instagram }}
+                                {% if form.instagram.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.instagram.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-twitter mr-2'></i>Twitter
+                                </label>
+                                {{ form.twitter }}
+                                {% if form.twitter.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.twitter.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-linkedin mr-2'></i>LinkedIn
+                                </label>
+                                {{ form.linkedin }}
+                                {% if form.linkedin.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.linkedin.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-youtube mr-2'></i>YouTube
+                                </label>
+                                {{ form.youtube }}
+                                {% if form.youtube.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.youtube.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bxl-tiktok mr-2'></i>TikTok
+                                </label>
+                                {{ form.tiktok }}
+                                {% if form.tiktok.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.tiktok.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Horaires d'ouverture -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-time mr-2'></i>Horaires d'ouverture
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Lundi
+                                </label>
+                                {{ form.horaires_lundi }}
+                                {% if form.horaires_lundi.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_lundi.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Mardi
+                                </label>
+                                {{ form.horaires_mardi }}
+                                {% if form.horaires_mardi.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_mardi.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Mercredi
+                                </label>
+                                {{ form.horaires_mercredi }}
+                                {% if form.horaires_mercredi.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_mercredi.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Jeudi
+                                </label>
+                                {{ form.horaires_jeudi }}
+                                {% if form.horaires_jeudi.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_jeudi.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Vendredi
+                                </label>
+                                {{ form.horaires_vendredi }}
+                                {% if form.horaires_vendredi.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_vendredi.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Samedi
+                                </label>
+                                {{ form.horaires_samedi }}
+                                {% if form.horaires_samedi.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_samedi.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-calendar mr-2'></i>Dimanche
+                                </label>
+                                {{ form.horaires_dimanche }}
+                                {% if form.horaires_dimanche.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.horaires_dimanche.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- À propos -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-info-square mr-2'></i>À propos
+                        </h2>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class='bx bx-text mr-2'></i>Texte de présentation
+                            </label>
+                            {{ form.a_propos }}
+                            {% if form.a_propos.errors %}
+                                <div class="text-red-600 text-sm mt-1">{{ form.a_propos.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                            <i class='bx bx-image mr-2'></i>Images
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-image-alt mr-2'></i>Logo
+                                </label>
+                                {{ form.logo }}
+                                {% if form.logo.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.logo.errors.0 }}</div>
+                                {% endif %}
+                                {% if config.logo %}
+                                    <div class="mt-2">
+                                        <img src="{{ config.logo.url }}" alt="Logo actuel" class="h-16 w-auto border rounded">
+                                        <p class="text-sm text-gray-500 mt-1">Logo actuel</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-bookmark mr-2'></i>Favicon
+                                </label>
+                                {{ form.favicon }}
+                                {% if form.favicon.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.favicon.errors.0 }}</div>
+                                {% endif %}
+                                {% if config.favicon %}
+                                    <div class="mt-2">
+                                        <img src="{{ config.favicon.url }}" alt="Favicon actuel" class="h-8 w-8 border rounded">
+                                        <p class="text-sm text-gray-500 mt-1">Favicon actuel</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boutons d'action -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-500">
+                                <i class='bx bx-info-circle mr-1'></i>
+                                Dernière modification : {{ config.date_modification|date:"d/m/Y à H:i" }}
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="{% url 'admin_dashboard' %}" 
+                                   class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center">
+                                    <i class='bx bx-arrow-back mr-2'></i>Retour
+                                </a>
+                                <button type="submit" 
+                                        class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center">
+                                    <i class='bx bx-save mr-2'></i>Enregistrer
                                 </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <script>
+        // Prévisualisation des images
+        function previewImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Validation des URLs
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlInputs = document.querySelectorAll('input[type="url"]');
+            urlInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value && !this.value.startsWith('http')) {
+                        this.value = 'https://' + this.value;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

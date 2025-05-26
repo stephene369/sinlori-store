@@ -77,6 +77,37 @@ class Produit(models.Model):
 
 from django.core.validators import RegexValidator
 
+
+
+
+# # Nouveau modèle pour la configuration du site
+# class SiteConfig(models.Model):
+#     nom_site = models.CharField(max_length=100, default="Mon Shop")
+#     slogan = models.CharField(max_length=200, blank=True, null=True)
+#     description = models.TextField(blank=True, null=True)
+#     logo = models.ImageField(upload_to='site/', blank=True, null=True)
+#     favicon = models.ImageField(upload_to='site/', blank=True, null=True)
+#     email = models.EmailField(blank=True, null=True)
+#     telephone = models.CharField(max_length=20, blank=True, null=True)
+#     adresse = models.TextField(blank=True, null=True)
+#     date_modification = models.DateTimeField(auto_now=True)
+    
+#     class Meta:
+#         verbose_name = "Configuration du site"
+#         verbose_name_plural = "Configuration du site"
+    
+#     def __str__(self):
+#         return self.nom_site
+    
+#     def save(self, *args, **kwargs):
+#         # S'assurer qu'il n'y a qu'une seule configuration
+#         if not self.pk and SiteConfig.objects.exists():
+#             raise ValueError('Il ne peut y avoir qu\'une seule configuration de site')
+#         return super().save(*args, **kwargs)
+
+
+
+
 class ConfigurationSite(models.Model):
     # Informations de base (prédéfinies)
     nom_site = models.CharField(max_length=100, default="ShopExcellence", 
@@ -221,33 +252,3 @@ class ConfigurationSite(models.Model):
         if self.tiktok:
             reseaux['TikTok'] = {'url': self.tiktok, 'icon': 'bxl-tiktok'}
         return reseaux
-
-
-
-
-
-
-# Nouveau modèle pour la configuration du site
-class SiteConfig(models.Model):
-    nom_site = models.CharField(max_length=100, default="Mon Shop")
-    slogan = models.CharField(max_length=200, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    logo = models.ImageField(upload_to='site/', blank=True, null=True)
-    favicon = models.ImageField(upload_to='site/', blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-    telephone = models.CharField(max_length=20, blank=True, null=True)
-    adresse = models.TextField(blank=True, null=True)
-    date_modification = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        verbose_name = "Configuration du site"
-        verbose_name_plural = "Configuration du site"
-    
-    def __str__(self):
-        return self.nom_site
-    
-    def save(self, *args, **kwargs):
-        # S'assurer qu'il n'y a qu'une seule configuration
-        if not self.pk and SiteConfig.objects.exists():
-            raise ValueError('Il ne peut y avoir qu\'une seule configuration de site')
-        return super().save(*args, **kwargs)

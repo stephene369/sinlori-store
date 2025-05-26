@@ -15,8 +15,7 @@ urlpatterns = [
     path('a-propos/', views.a_propos, name='a_propos'),
     
     
-    
-        # URLs d'administration
+    # URLs d'administration
     path('admin-custom/', admin_views.admin_login, name='admin_login'),
     path('admin-custom/logout/', admin_views.admin_logout, name='admin_logout'),
     path('admin-custom/dashboard/', admin_views.admin_dashboard, name='admin_dashboard'),
