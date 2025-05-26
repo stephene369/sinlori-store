@@ -22,15 +22,38 @@
     </script>
 </head>
 <body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="bg-dark text-white w-64 flex-shrink-0">
-            <div class="p-6">
-                <div class="flex items-center space-x-3 mb-8">
-                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                        <i class='bx bx-store text-white'></i>
+    <div class="min-h-screen">
+        <!-- Header mobile avec menu burger -->
+        <div class="lg:hidden bg-dark text-white">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <i class='bx bx-store text-white text-sm'></i>
                     </div>
-                    <span class="text-xl font-bold">Admin Panel</span>
+                    <span class="text-lg font-bold">Admin Panel</span>
+                </div>
+                <button id="mobile-menu-btn" class="text-white hover:text-gray-300 transition-colors">
+                    <i class='bx bx-menu text-2xl'></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Overlay pour mobile -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+        <!-- Menu mobile -->
+        <div id="mobile-menu" class="fixed top-0 left-0 h-full w-80 bg-dark text-white transform -translate-x-full transition-transform duration-300 ease-in-out z-50 lg:hidden">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class='bx bx-store text-white'></i>
+                        </div>
+                        <span class="text-xl font-bold">Admin Panel</span>
+                    </div>
+                    <button id="close-mobile-menu" class="text-white hover:text-gray-300">
+                        <i class='bx bx-x text-2xl'></i>
+                    </button>
                 </div>
 
                 <nav class="space-y-2">
@@ -57,7 +80,8 @@
                 </nav>
             </div>
 
-            <div class="absolute bottom-0 w-64 p-6">
+            <!-- User info mobile -->
+            <div class="absolute bottom-0 w-full p-6">
                 <div class="border-t border-gray-700 pt-4">
                     <div class="flex items-center space-x-3 mb-4">
                         <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
@@ -73,62 +97,199 @@
             </div>
         </div>
 
-        <!-- Contenu principal -->
-        <div class="flex-1 overflow-auto">
-            <!-- Header -->
-            <div class="bg-white shadow-sm border-b p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <a href="{% url 'admin_categories' %}" class="text-gray-500 hover:text-primary">
-                            <i class='bx bx-arrow-back text-xl'></i>
+        <div class="flex">
+            <!-- Sidebar Desktop -->
+            <div class="hidden lg:block bg-dark text-white w-64 flex-shrink-0 min-h-screen">
+                <div class="p-6">
+                    <div class="flex items-center space-x-3 mb-8">
+                        <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class='bx bx-store text-white'></i>
+                        </div>
+                        <span class="text-xl font-bold">Admin Panel</span>
+                    </div>
+
+                    <nav class="space-y-2">
+                        <a href="{% url 'admin_dashboard' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class='bx bx-home'></i>
+                            <span>Dashboard</span>
                         </a>
-                        <h1 class="text-2xl font-bold text-dark">{{ action }} Catégorie</h1>
+                        <a href="{% url 'admin_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white">
+                            <i class='bx bx-category'></i>
+                            <span>Catégories</span>
+                        </a>
+                        <a href="{% url 'admin_sous_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class='bx bx-list-ul'></i>
+                            <span>Sous-catégories</span>
+                        </a>
+                        <a href="{% url 'admin_produits' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class='bx bx-package'></i>
+                            <span>Produits</span>
+                        </a>
+                        <a href="{% url 'admin_site_config' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class='bx bx-cog'></i>
+                            <span>Configuration</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="absolute bottom-0 w-64 p-6">
+                    <div class="border-t border-gray-700 pt-4">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <i class='bx bx-user text-white text-sm'></i>
+                            </div>
+                            <span class="text-sm">{{ user.username }}</span>
+                        </div>
+                        <a href="{% url 'admin_logout' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                            <i class='bx bx-log-out'></i>
+                            <span>Déconnexion</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Contenu -->
-            <div class="p-6">
-                <div class="max-w-2xl mx-auto">
-                    <div class="bg-white rounded-xl shadow-lg p-8">
-                        <form method="post" class="space-y-6">
-                            {% csrf_token %}
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <i class='bx bx-category mr-2'></i>Nom de la catégorie
-                                </label>
-                                {{ form.nom }}
-                                {% if form.nom.errors %}
-                                    <div class="text-red-600 text-sm mt-1">{{ form.nom.errors.0 }}</div>
-                                {% endif %}
-                            </div>
+            <!-- Contenu principal -->
+            <div class="flex-1 overflow-auto">
+                <!-- Header -->
+                <div class="bg-white shadow-sm border-b p-4 lg:p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 lg:space-x-4">
+                            <a href="{% url 'admin_categories' %}" class="text-gray-500 hover:text-primary transition-colors">
+                                <i class='bx bx-arrow-back text-xl'></i>
+                            </a>
+                            <h1 class="text-xl lg:text-2xl font-bold text-dark">{{ action }} Catégorie</h1>
+                        </div>
+                        <!-- Bouton menu mobile (visible uniquement sur mobile si nécessaire) -->
+                        <div class="lg:hidden">
+                            <a href="{% url 'admin_categories' %}" class="text-gray-500 hover:text-primary">
+                                <i class='bx bx-x text-xl'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <i class='bx bx-text mr-2'></i>Description
-                                </label>
-                                {{ form.description }}
-                                {% if form.description.errors %}
-                                    <div class="text-red-600 text-sm mt-1">{{ form.description.errors.0 }}</div>
-                                {% endif %}
-                            </div>
+                <!-- Contenu -->
+                <div class="p-4 lg:p-6">
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-white rounded-xl shadow-lg p-4 lg:p-8">
+                            <form method="post" class="space-y-6">
+                                {% csrf_token %}
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-category mr-2'></i>Nom de la catégorie
+                                    </label>
+                                    <input type="text" 
+                                           name="{{ form.nom.name }}" 
+                                           value="{{ form.nom.value|default:'' }}"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-base"
+                                           placeholder="Entrez le nom de la catégorie"
+                                           required>
+                                    {% if form.nom.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.nom.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
 
-                            <div class="flex space-x-4 pt-6">
-                                <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
-                                    <i class='bx bx-save mr-2'></i>
-                                    {{ action }} la catégorie
-                                </button>
-                                <a href="{% url 'admin_categories' %}" class="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center">
-                                    <i class='bx bx-x mr-2'></i>
-                                    Annuler
-                                </a>
-                            </div>
-                        </form>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-text mr-2'></i>Description
+                                    </label>
+                                    <textarea name="{{ form.description.name }}" 
+                                              rows="4"
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-base resize-none"
+                                              placeholder="Entrez une description (optionnel)">{{ form.description.value|default:'' }}</textarea>
+                                    {% if form.description.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.description.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Boutons d'action - Stack sur mobile, côte à côte sur desktop -->
+                                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-6">
+                                    <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center font-medium text-base">
+                                        <i class='bx bx-save mr-2'></i>
+                                        {{ action }} la catégorie
+                                    </button>
+                                    <a href="{% url 'admin_categories' %}" class="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center font-medium text-base">
+                                        <i class='bx bx-x mr-2'></i>
+                                        Annuler
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Gestion du menu mobile
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const closeMobileMenu = document.getElementById('close-mobile-menu');
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('-translate-x-full');
+            mobileOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenuFunc() {
+            mobileMenu.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+        }
+
+        if (closeMobileMenu) {
+            closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
+        }
+
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMobileMenuFunc);
+        }
+
+        // Fermer le menu mobile lors du redimensionnement vers desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeMobileMenuFunc();
+            }
+        });
+
+        // Gestion du clavier pour l'accessibilité
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMobileMenuFunc();
+            }
+        });
+
+        // Auto-focus sur le premier champ
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstInput = document.querySelector('input[type="text"]');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        });
+
+        // Validation en temps réel
+        document.addEventListener('DOMContentLoaded', function() {
+            const nomInput = document.querySelector('input[name="nom"]');
+            if (nomInput) {
+                nomInput.addEventListener('input', function() {
+                    if (this.value.trim().length > 0) {
+                        this.classList.remove('border-red-300');
+                        this.classList.add('border-green-300');
+                    } else {
+                        this.classList.remove('border-green-300');
+                        this.classList.add('border-gray-300');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
