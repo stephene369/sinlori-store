@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#8B5CF6',
+                        accent: '#EC4899',
+                        dark: '#1F2937'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="bg-dark text-white w-64 flex-shrink-0">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <i class='bx bx-store text-white'></i>
+                    </div>
+                    <span class="text-xl font-bold">Admin Panel</span>
+                </div>
+
+                <nav class="space-y-2">
+                    <a href="{% url 'admin_dashboard' %}" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white">
+                        <i class='bx bx-home'></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'admin_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-category'></i>
+                        <span>Catégories</span>
+                    </a>
+                    <a href="{% url 'admin_sous_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-list-ul'></i>
+                        <span>Sous-catégories</span>
+                    </a>
+                    <a href="{% url 'admin_produits' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-package'></i>
+                        <span>Produits</span>
+                    </a>
+                    <a href="{% url 'admin_site_config' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-cog'></i>
+                        <span>Configuration</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="absolute bottom-0 w-64 p-6">
+                <div class="border-t border-gray-700 pt-4">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <i class='bx bx-user text-white text-sm'></i>
+                        </div>
+                        <span class="text-sm">{{ user.username }}</span>
+                    </div>
+                    <a href="{% url 'admin_logout' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        <i class='bx bx-log-out'></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <div class="bg-white shadow-sm border-b p-6">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-dark">Dashboard</h1>
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'accueil' %}" target="_blank" class="text-primary hover:text-secondary transition-colors">
+                            <i class='bx bx-external-link mr-1'></i>Voir le site
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenu -->
+            <div class="p-6">
+                <!-- Statistiques -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Catégories</p>
+                                <p class="text-2xl font-bold text-dark">{{ stats.total_categories }}</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class='bx bx-category text-blue-600 text-xl'></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Sous-catégories</p>
+                                <p class="text-2xl font-bold text-dark">{{ stats.total_sous_categories }}</p>
+                            </div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i class='bx bx-list-ul text-purple-600 text-xl'></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Produits</p>
+                                <p class="text-2xl font-bold text-dark">{{ stats.total_produits }}</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class='bx bx-package text-green-600 text-xl'></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">En stock</p>
+                                <p class="text-2xl font-bold text-dark">{{ stats.produits_en_stock }}</p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                <i class='bx bx-check text-yellow-600 text-xl'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions rapides -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-dark mb-4">Actions rapides</h3>
+                        <div class="space-y-3">
+                            <a href="{% url 'admin_categorie_create' %}" class="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                                <i class='bx bx-plus text-blue-600'></i>
+                                <span class="text-blue-600 font-medium">Nouvelle catégorie</span>
+                            </a>
+                            <a href="{% url 'admin_sous_categorie_create' %}" class="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                                <i class='bx bx-plus text-purple-600'></i>
+                                <span class="text-purple-600 font-medium">Nouvelle sous-catégorie</span>
+                            </a>
+                            <a href="{% url 'admin_produit_create' %}" class="flex items-center space-x-3 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                                <i class='bx bx-plus text-green-600'></i>
+                                <span class="text-green-600 font-medium">Nouveau produit</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-dark mb-4">Derniers produits</h3>
+                        <div class="space-y-3">
+                            {% for produit in derniers_produits %}
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                                    <i class='bx bx-package text-white'></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-dark">{{ produit.nom }}</p>
+                                    <p class="text-sm text-gray-600">{{ produit.prix }} FCFA</p>
+                                </div>
+                                <a href="{% url 'admin_produit_edit' produit.pk %}" class="text-primary hover:text-secondary">
+                                    <i class='bx bx-edit'></i>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ action }} Produit - Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#8B5CF6',
+                        accent: '#EC4899',
+                        dark: '#1F2937'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="bg-dark text-white w-64 flex-shrink-0">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <i class='bx bx-store text-white'></i>
+                    </div>
+                    <span class="text-xl font-bold">Admin Panel</span>
+                </div>
+
+                <nav class="space-y-2">
+                    <a href="{% url 'admin_dashboard' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-home'></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'admin_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-category'></i>
+                        <span>Catégories</span>
+                    </a>
+                    <a href="{% url 'admin_sous_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-list-ul'></i>
+                        <span>Sous-catégories</span>
+                    </a>
+                    <a href="{% url 'admin_produits' %}" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white">
+                        <i class='bx bx-package'></i>
+                        <span>Produits</span>
+                    </a>
+                    <a href="{% url 'admin_site_config' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-cog'></i>
+                        <span>Configuration</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="absolute bottom-0 w-64 p-6">
+                <div class="border-t border-gray-700 pt-4">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <i class='bx bx-user text-white text-sm'></i>
+                        </div>
+                        <span class="text-sm">{{ user.username }}</span>
+                    </div>
+                    <a href="{% url 'admin_logout' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        <i class='bx bx-log-out'></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <div class="bg-white shadow-sm border-b p-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'admin_produits' %}" class="text-gray-500 hover:text-primary">
+                            <i class='bx bx-arrow-back text-xl'></i>
+                        </a>
+                        <h1 class="text-2xl font-bold text-dark">{{ action }} Produit</h1>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenu -->
+            <div class="p-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <form method="post" enctype="multipart/form-data" class="space-y-6">
+                            {% csrf_token %}
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-package mr-2'></i>Nom du produit
+                                    </label>
+                                    {{ form.nom }}
+                                    {% if form.nom.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.nom.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-money mr-2'></i>Prix (FCFA)
+                                    </label>
+                                    {{ form.prix }}
+                                    {% if form.prix.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.prix.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class='bx bx-text mr-2'></i>Description
+                                </label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.description.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-category mr-2'></i>Sous-catégorie
+                                    </label>
+                                    {{ form.sous_categorie }}
+                                    {% if form.sous_categorie.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.sous_categorie.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class='bx bx-image mr-2'></i>Image du produit
+                                    </label>
+                                    {{ form.image }}
+                                    {% if form.image.errors %}
+                                        <div class="text-red-600 text-sm mt-1">{{ form.image.errors.0 }}</div>
+                                    {% endif %}
+                                    {% if produit and produit.image %}
+                                        <div class="mt-2">
+                                            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="w-20 h-20 object-cover rounded-lg">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="flex items-center space-x-3">
+                                    {{ form.en_stock }}
+                                    <span class="text-sm font-medium text-gray-700">
+                                        <i class='bx bx-check mr-2'></i>Produit en stock
+                                    </span>
+                                </label>
+                                {% if form.en_stock.errors %}
+                                    <div class="text-red-600 text-sm mt-1">{{ form.en_stock.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="flex space-x-4 pt-6">
+                                <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                                    <i class='bx bx-save mr-2'></i>
+                                    {{ action }} le produit
+                                </button>
+                                <a href="{% url 'admin_produits' %}" class="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center">
+                                    <i class='bx bx-x mr-2'></i>
+                                    Annuler
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

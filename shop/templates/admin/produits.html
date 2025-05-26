@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#8B5CF6',
+                        accent: '#EC4899',
+                        dark: '#1F2937'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="bg-dark text-white w-64 flex-shrink-0">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <i class='bx bx-store text-white'></i>
+                    </div>
+                    <span class="text-xl font-bold">Admin Panel</span>
+                </div>
+
+                <nav class="space-y-2">
+                    <a href="{% url 'admin_dashboard' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-home'></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'admin_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-category'></i>
+                        <span>Catégories</span>
+                    </a>
+                    <a href="{% url 'admin_sous_categories' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-list-ul'></i>
+                        <span>Sous-catégories</span>
+                    </a>
+                    <a href="{% url 'admin_produits' %}" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white">
+                        <i class='bx bx-package'></i>
+                        <span>Produits</span>
+                    </a>
+                    <a href="{% url 'admin_site_config' %}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class='bx bx-cog'></i>
+                        <span>Configuration</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="absolute bottom-0 w-64 p-6">
+                <div class="border-t border-gray-700 pt-4">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <i class='bx bx-user text-white text-sm'></i>
+                        </div>
+                        <span class="text-sm">{{ user.username }}</span>
+                    </div>
+                    <a href="{% url 'admin_logout' %}" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        <i class='bx bx-log-out'></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <div class="bg-white shadow-sm border-b p-6">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-dark">Gestion des Produits</h1>
+                    <a href="{% url 'admin_produit_create' %}" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center">
+                        <i class='bx bx-plus mr-2'></i>
+                        Nouveau produit
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filtres -->
+            <div class="bg-white border-b p-6">
+                <form method="get" class="flex flex-wrap gap-4">
+                    <div class="flex-1 min-w-64">
+                        <input type="text" name="search" value="{{ search }}" placeholder="Rechercher un produit..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <select name="categorie" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Toutes les catégories</option>
+                            {% for categorie in categories %}
+                                <option value="{{ categorie.id }}" {% if selected_categorie == categorie.id %}selected{% endif %}>
+                                    {{ categorie.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <select name="en_stock" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Tous les stocks</option>
+                            <option value="true" {% if selected_stock == 'true' %}selected{% endif %}>En stock</option>
+                            <option value="false" {% if selected_stock == 'false' %}selected{% endif %}>Rupture</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        <i class='bx bx-search mr-2'></i>Filtrer
+                    </button>
+                </form>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+            <div class="p-6">
+                {% for message in messages %}
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Contenu -->
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {% for produit in produits %}
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="relative">
+                            {% if produit.image %}
+                                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="w-full h-48 object-cover">
+                            {% else %}
+                                <div class="w-full h-48 bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                                    <i class='bx bx-package text-white text-4xl'></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="absolute top-2 right-2">
+                                {% if produit.en_stock %}
+                                    <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs">En stock</span>
+                                {% else %}
+                                    <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">Rupture</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="p-4">
+                            <h3 class="font-bold text-dark mb-2 truncate">{{ produit.nom }}</h3>
+                            <p class="text-gray-600 text-sm mb-2 line-clamp-2">{{ produit.description|truncatechars:60 }}</p>
+                            <p class="text-primary font-bold text-lg mb-2">{{ produit.prix|floatformat:0 }} FCFA</p>
+                            <p class="text-gray-500 text-xs mb-4">{{ produit.sous_categorie.categorie.nom }} > {{ produit.sous_categorie.nom }}</p>
+                            
+                            <div class="flex space-x-2">
+                                <a href="{% url 'admin_produit_edit' produit.pk %}" class="flex-1 bg-blue-500 text-white py-2 px-3 rounded-lg hover:bg-blue-600 transition-colors text-center text-sm">
+                                    <i class='bx bx-edit mr-1'></i>Modifier
+                                </a>
+                                <a href="{% url 'admin_produit_delete' produit.pk %}" class="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600 transition-colors text-center text-sm">
+                                    <i class='bx bx-trash mr-1'></i>Supprimer
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-gray-500">
+                            <i class='bx bx-package text-6xl mb-4'></i>
+                            <p class="text-xl mb-2">Aucun produit trouvé</p>
+                            <p class="text-sm mb-6">Créez votre premier produit pour commencer</p>
+                            <a href="{% url 'admin_produit_create' %}" class="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                                <i class='bx bx-plus mr-2'></i>Créer un produit
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if produits.has_other_pages %}
+                <div class="mt-8 flex justify-center">
+                    <nav class="flex space-x-2">
+                        {% if produits.has_previous %}
+                            <a href="?page={{ produits.previous_page_number }}&search={{ search }}&categorie={{ selected_categorie }}&en_stock={{ selected_stock }}" 
+                               class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                <i class='bx bx-chevron-left'></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% for num in produits.paginator.page_range %}
+                            {% if produits.number == num %}
+                                <span class="px-3 py-2 bg-primary text-white rounded-lg">{{ num }}</span>
+                            {% else %}
+                                <a href="?page={{ num }}&search={{ search }}&categorie={{ selected_categorie }}&en_stock={{ selected_stock }}" 
+                                   class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if produits.has_next %}
+                            <a href="?page={{ produits.next_page_number }}&search={{ search }}&categorie={{ selected_categorie }}&en_stock={{ selected_stock }}" 
+                               class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                <i class='bx bx-chevron-right'></i>
+                            </a>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
