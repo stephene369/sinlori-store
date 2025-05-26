@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="bg-gradient-to-r from-primary to-secondary text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 flex items-center justify-center">
+            <i class='bx bx-phone mr-4'></i>Contactez-nous
+        </h1>
+        <p class="text-xl text-gray-100">Nous sommes là pour vous aider</p>
+    </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Informations de contact -->
+            <div class="space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-dark mb-6">Nos coordonnées</h2>
+                    
+                    <!-- Email -->
+                    {% if site_config.email %}
+                    <div class="flex items-start space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class='bx bx-envelope text-white text-xl'></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-dark mb-1">Email</h3>
+                            <a href="mailto:{{ site_config.email }}" class="text-gray-600 hover:text-primary transition-colors">
+                                {{ site_config.email }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Téléphone -->
+                    {% if site_config.telephone %}
+                    <div class="flex items-start space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-accent to-primary rounded-lg flex items-center justify-center">
+                            <i class='bx bx-phone text-white text-xl'></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-dark mb-1">Téléphone</h3>
+                            <a href="tel:{{ site_config.telephone }}" class="text-gray-600 hover:text-primary transition-colors">
+                                {{ site_config.telephone }}
+                            </a>
+                            {% if site_config.telephone_2 %}
+                            <br>
+                            <a href="tel:{{ site_config.telephone_2 }}" class="text-gray-600 hover:text-primary transition-colors">
+                                {{ site_config.telephone_2 }}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- WhatsApp -->
+                    {% if site_config.whatsapp %}
+                    <div class="flex items-start space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                            <i class='bx bxl-whatsapp text-white text-xl'></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-dark mb-1">WhatsApp</h3>
+                            <a href="{{ site_config.whatsapp_url }}" target="_blank" 
+                               class="text-gray-600 hover:text-green-500 transition-colors">
+                                {{ site_config.whatsapp }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Adresse -->
+                    {% if site_config.adresse %}
+                    <div class="flex items-start space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-secondary to-accent rounded-lg flex items-center justify-center">
+                            <i class='bx bx-map text-white text-xl'></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-dark mb-1">Adresse</h3>
+                            <p class="text-gray-600">{{ site_config.adresse_complete }}</p>
+                            {% if site_config.lien_google_maps %}
+                            <a href="{{ site_config.lien_google_maps }}" target="_blank" 
+                               class="text-primary hover:text-secondary transition-colors text-sm">
+                                <i class='bx bx-map-pin mr-1'></i>Voir sur Google Maps
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Horaires -->
+                {% if site_config.horaires_lundi or site_config.horaires_mardi or site_config.horaires_mercredi or site_config.horaires_jeudi or site_config.horaires_vendredi or site_config.horaires_samedi or site_config.horaires_dimanche %}
+                <div>
+                    <h2 class="text-2xl font-bold text-dark mb-6">Horaires d'ouverture</h2>
+                    <div class="bg-white rounded-lg p-6 shadow-lg">
+                        {% for jour, horaire in site_config.horaires_semaine.items %}
+                        {% if horaire %}
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
+                            <span class="font-medium text-dark">{{ jour }}</span>
+                            <span class="text-gray-600">{{ horaire }}</span>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Réseaux sociaux -->
+                <!-- Réseaux sociaux -->
+                {% if site_config.reseaux_sociaux %}
+                <div>
+                    <h2 class="text-2xl font-bold text-dark mb-6">Suivez-nous</h2>
+                    <div class="flex space-x-4">
+                        {% for nom, reseau in site_config.reseaux_sociaux.items %}
+                        <a href="{{ reseau.url }}" target="_blank" 
+                           class="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center hover:shadow-lg transition-all duration-300 group">
+                            <i class='bx {{ reseau.icon }} text-white text-xl group-hover:scale-110 transition-transform'></i>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Formulaire de contact -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-dark mb-6">Envoyez-nous un message</h2>
+                
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                            <input type="text" name="nom" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input type="email" name="email" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                        <input type="tel" name="telephone" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sujet *</label>
+                        <input type="text" name="sujet" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                        <textarea name="message" rows="5" required 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"></textarea>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                        <i class='bx bx-send mr-2'></i>
+                        Envoyer le message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+{% if site_config.lien_google_maps %}
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-dark mb-4">Notre localisation</h2>
+            <p class="text-xl text-gray-600">Venez nous rendre visite</p>
+        </div>
+        
+        <div class="rounded-2xl overflow-hidden shadow-lg">
+            <iframe src="{{ site_config.lien_google_maps }}" 
+                    width="100%" height="400" style="border:0;" 
+                    allowfullscreen="" loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,7 @@
+Django
+gunicorn
+Pillow
+python-decouple
+whitenoise
+psycopg2-binary
+dj-database-url

@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur - Une erreur s'est produite</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#8B5CF6',
+                        accent: '#EC4899',
+                        dark: '#1F2937'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <section class="min-h-screen flex items-center justify-center py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="bg-white rounded-2xl shadow-lg p-12">
+                <div class="w-32 h-32 bg-gradient-to-r from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <i class='bx bx-error-circle text-white text-6xl'></i>
+                </div>
+                <h1 class="text-4xl font-bold text-dark mb-4">Oups !</h1>
+                <h2 class="text-2xl font-bold text-dark mb-4">Une erreur s'est produite</h2>
+                <p class="text-xl text-gray-600 mb-8">
+                    Nous rencontrons actuellement un problème technique. 
+                    Nos équipes travaillent pour le résoudre rapidement.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/" 
+                       class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                        <i class='bx bx-home mr-2'></i>
+                        Retour à l'accueil
+                    </a>
+                    <button onclick="window.location.reload()" 
+                            class="border-2 border-primary text-primary px-8 py-4 rounded-lg hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center">
+                        <i class='bx bx-refresh mr-2'></i>
+                        Réessayer
+                    </button>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <p class="text-gray-500 text-sm">
+                        Si le problème persiste, contactez-nous à 
+                        <a href="mailto:support@votresite.com" class="text-primary hover:underline">support@votresite.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

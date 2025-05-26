@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<section class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <nav class="flex items-center space-x-2 text-sm">
+            <a href="{% url 'accueil' %}" class="text-gray-500 hover:text-primary transition-colors flex items-center">
+                <i class='bx bx-home mr-1'></i>Accueil
+            </a>
+            <i class='bx bx-chevron-right text-gray-400'></i>
+            <a href="{% url 'sous_categories' sous_categorie.categorie.id %}" class="text-gray-500 hover:text-primary transition-colors">
+                {{ sous_categorie.categorie.nom }}
+            </a>
+            <i class='bx bx-chevron-right text-gray-400'></i>
+            <span class="text-dark font-medium">{{ sous_categorie.nom }}</span>
+        </nav>
+    </div>
+</section>
+
+<!-- Header Section -->
+<section class="bg-gradient-to-r from-accent to-primary text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div>
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">{{ sous_categorie.nom }}</h1>
+                <p class="text-xl text-gray-100">{{ sous_categorie.description|default:"Découvrez notre sélection" }}</p>
+            </div>
+            <div class="mt-6 md:mt-0">
+                <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center">
+                    <i class='bx bx-package text-4xl mb-2'></i>
+                    <p class="text-sm">{{ produits|length }} produit{{ produits|length|pluralize }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filtres et tri -->
+<section class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-600">{{ produits|length }} produit{{ produits|length|pluralize }} trouvé{{ produits|length|pluralize }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <select class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option>Trier par prix croissant</option>
+                    <option>Trier par prix décroissant</option>
+                    <option>Trier par nom</option>
+                </select>
+                <div class="flex border border-gray-300 rounded-lg">
+                    <button class="p-2 hover:bg-gray-100 transition-colors">
+                        <i class='bx bx-grid-alt'></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 transition-colors">
+                        <i class='bx bx-list-ul'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Grille des produits -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% for produit in produits %}
+            <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer" onclick="openProductModal({{ produit.id }})"> 
+                <div class="relative">
+                    {% if produit.image %}
+                    <div class="cursor-pointer" onclick="openProductModal({{ produit.id }})">
+                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    {% else %}
+                    <div class="w-full h-64 bg-gradient-to-br from-primary to-secondary flex items-center justify-center cursor-pointer" 
+                         onclick="openProductModal({{ produit.id }})">
+                        <i class='bx bx-package text-white text-4xl'></i>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Badges -->
+                    <div class="absolute top-4 left-4">
+                        {% if produit.en_stock %}
+                        <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                            <i class='bx bx-check mr-1'></i>En stock
+                        </span>
+                        {% else %}
+                        <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                            <i class='bx bx-x mr-1'></i>Rupture
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Actions hover -->
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button class="bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors mb-2 block">
+                            <i class='bx bx-heart text-gray-600 hover:text-red-500'></i>
+                        </button>
+                        <button class="bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors block"
+                                onclick="openProductModal({{ produit.id }})">
+                            <i class='bx bx-show text-gray-600 hover:text-primary'></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Overlay pour indiquer qu'on peut cliquer -->
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="bg-white rounded-full p-3 shadow-lg">
+                                <i class='bx bx-search-alt text-primary text-xl'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-dark mb-2 group-hover:text-primary transition-colors cursor-pointer"
+                        onclick="openProductModal({{ produit.id }})">
+                        {{ produit.nom }}
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ produit.description|truncatewords:15 }}</p>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <span class="text-xl font-bold text-primary">{{ produit.prix|floatformat:0 }} FCFA</span>
+                        </div>
+                        <div class="flex items-center text-yellow-400">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bx-star'></i>
+                            <span class="text-gray-500 text-sm ml-1">(4.0)</span>
+                        </div>
+                    </div>
+                    
+                    {% if produit.en_stock %}
+                    <form method="post" action="{% url 'ajouter_panier' %}" class="w-full">
+                        {% csrf_token %}
+                        <input type="hidden" name="produit_id" value="{{ produit.id }}">
+                        <button type="submit" 
+                                class="w-full bg-gradient-to-r from-primary to-secondary text-white py-2 px-4 rounded-lg hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center text-sm">
+                            <i class='bx bx-cart-add mr-2'></i>
+                            Ajouter au panier
+                        </button>
+                    </form>
+                    {% else %}
+                    <button disabled class="w-full bg-gray-300 text-gray-500 py-2 px-4 rounded-lg cursor-not-allowed flex items-center justify-center text-sm">
+                        <i class='bx bx-x mr-2'></i>
+                        Indisponible
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <i class='bx bx-package text-6xl text-gray-300 mb-4'></i>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun produit disponible</h3>
+                <p class="text-gray-500 mb-6">Cette catégorie sera bientôt enrichie de nouveaux produits.</p>
+                <a href="{% url 'sous_categories' sous_categorie.categorie.id %}" 
+                   class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                    <i class='bx bx-arrow-back mr-2'></i>Retour aux catégories
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Modal de détail du produit -->
+<div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closeProductModal()"></div>
+        
+        <!-- Modal content -->
+        <div class="inline-block w-full max-w-4xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <!-- Header du modal -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-900" id="modalTitle">Détails du produit</h3>
+                <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class='bx bx-x text-3xl'></i>
+                </button>
+            </div>
+            
+            <!-- Contenu du modal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Image du produit -->
+                <div class="space-y-4">
+                    <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                        <img id="modalImage" src="" alt="" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Miniatures (si plusieurs images) -->
+                    {% comment %} <div class="flex space-x-2">
+                        <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden cursor-pointer">
+                            <img id="modalThumb1" src="" alt="" class="w-full h-full object-cover">
+                        </div>
+                        <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden cursor-pointer">
+                            <img id="modalThumb2" src="" alt="" class="w-full h-full object-cover">
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+                
+                <!-- Informations du produit -->
+                <div class="space-y-6">
+                    <div>
+                        <h2 id="modalProductName" class="text-3xl font-bold text-gray-900 mb-2"></h2>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <span id="modalPrice" class="text-3xl font-bold text-primary"></span>
+                            <div id="modalStock" class="px-3 py-1 rounded-full text-sm font-semibold"></div>
+                        </div>
+                        <div class="flex items-center text-yellow-400 mb-4">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bx-star'></i>
+                            <span class="text-gray-500 text-sm ml-2">(4.0) - 25 avis</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Description</h4>
+                        <p id="modalDescription" class="text-gray-600 leading-relaxed"></p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Caractéristiques</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            {% comment %} <li class="flex items-center"><i class='bx bx-check text-green-500 mr-2'></i>Garantie </li> {% endcomment %}
+                            <li class="flex items-center"><i class='bx bx-check text-green-500 mr-2'></i>Livraison partout</li>
+                            <li class="flex items-center"><i class='bx bx-check text-green-500 mr-2'></i>Support technique inclus</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Quantité et actions -->
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <label class="text-sm font-medium text-gray-700">Quantité:</label>
+                            <div class="flex items-center border border-gray-300 rounded-lg">
+                                <button class="px-3 py-2 hover:bg-gray-100 transition-colors" onclick="decreaseQuantity()">
+                                    <i class='bx bx-minus'></i>
+                                </button>
+                                <input type="number" id="modalQuantity" value="1" min="1" class="w-16 text-center border-0 focus:ring-0">
+                                <button class="px-3 py-2 hover:bg-gray-100 transition-colors" onclick="increaseQuantity()">
+                                    <i class='bx bx-plus'></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button id="modalAddToCart" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                                <i class='bx bx-cart-add mr-2'></i>
+                                Ajouter au panier
+                            </button>
+                            <button class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+                                <i class='bx bx-heart'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript pour le modal -->
+<script>
+// Données des produits (à générer dynamiquement)
+const produits = {
+    {% for produit in produits %}
+    {{ produit.id }}: {
+        id: {{ produit.id }},
+        nom: "{{ produit.nom|escapejs }}",
+        description: "{{ produit.description|escapejs }}",
+        prix: "{{ produit.prix|floatformat:0 }} FCFA",
+        image: "{% if produit.image %}{{ produit.image.url }}{% else %}{% endif %}",
+        en_stock: {{ produit.en_stock|yesno:"true,false" }}
+    },
+    {% endfor %}
+};
+
+function openProductModal(productId) {
+    const produit = produits[productId];
+    if (!produit) return;
+    
+    // Remplir les données du modal
+    document.getElementById('modalTitle').textContent = 'Détails du produit';
+    document.getElementById('modalProductName').textContent = produit.nom;
+    document.getElementById('modalDescription').textContent = produit.description;
+    document.getElementById('modalPrice').textContent = produit.prix;
+    
+    // Image
+    const modalImage = document.getElementById('modalImage');
+    if (produit.image) {
+        modalImage.src = produit.image;
+        modalImage.alt = produit.nom;
+    } else {
+        modalImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBub24gZGlzcG9uaWJsZTwvdGV4dD48L3N2Zz4=';
+    }
+    
+    // Stock
+    const modalStock = document.getElementById('modalStock');
+    if (produit.en_stock) {
+        modalStock.textContent = 'En stock';
+        modalStock.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800';
+    } else {
+        modalStock.textContent = 'Rupture de stock';
+        modalStock.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800';
+    }
+    
+    // Bouton d'ajout au panier
+    const addToCartBtn = document.getElementById('modalAddToCart');
+    if (produit.en_stock) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.className = 'flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center';
+        addToCartBtn.onclick = () => addToCartFromModal(productId);
+    } else {
+        addToCartBtn.disabled = true;
+        addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-500 py-3 px-6 rounded-lg cursor-not-allowed flex items-center justify-center';
+    }
+    
+    // Afficher le modal
+    document.getElementById('productModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function increaseQuantity() {
+    const input = document.getElementById('modalQuantity');
+    input.value = parseInt(input.value) + 1;
+}
+
+function decreaseQuantity() {
+    const input = document.getElementById('modalQuantity');
+    if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+    }
+}
+
+function addToCartFromModal(productId) {
+    const quantity = document.getElementById('modalQuantity').value;
+    
+    // Créer un formulaire temporaire pour soumettre
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% url "ajouter_panier" %}';
+    
+    const csrfToken = document.createElement('input');
+    csrfToken.type = 'hidden';
+    csrfToken.name = 'csrfmiddlewaretoken';
+    csrfToken.value = '{{ csrf_token }}';
+    
+    const productInput = document.createElement('input');
+    productInput.type = 'hidden';
+    productInput.name = 'produit_id';
+    productInput.value = productId;
+    
+    const quantityInput = document.createElement('input');
+    quantityInput.type = 'hidden';
+    quantityInput.name = 'quantite';
+    quantityInput.value = quantity;
+    
+    form.appendChild(csrfToken);
+    form.appendChild(productInput);
+    form.appendChild(quantityInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// Fermer le modal avec Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeProductModal();
+    }
+});
+</script>
+{% endblock %}

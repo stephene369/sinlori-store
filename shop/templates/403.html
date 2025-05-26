@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Accès interdit - {{ site_config.nom_site }}{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="bg-white rounded-2xl shadow-lg p-12">
+            <div class="w-32 h-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                <i class='bx bx-lock-alt text-white text-6xl'></i>
+            </div>
+            <h1 class="text-4xl font-bold text-dark mb-4">403</h1>
+            <h2 class="text-2xl font-bold text-dark mb-4">Accès interdit</h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Vous n'avez pas l'autorisation d'accéder à cette page.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'accueil' %}" 
+                   class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                    <i class='bx bx-home mr-2'></i>
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

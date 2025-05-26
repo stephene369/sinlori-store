@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="bg-gradient-to-r from-primary to-secondary text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 flex items-center justify-center">
+            <i class='bx bx-cart mr-4'></i>Mon Panier
+        </h1>
+        <p class="text-xl text-gray-100">Finalisez votre commande</p>
+    </div>
+</section>
+
+{% if panier_items %}
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Liste des produits -->
+            <div class="lg:col-span-2 space-y-6">
+                {% for item in panier_items %}
+                <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                        <div class="w-full sm:w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center overflow-hidden">
+                            {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.nom }}" 
+                                 class="w-full h-full object-cover">
+                            {% else %}
+                            <i class='bx bx-package text-white text-2xl'></i>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-dark mb-2">{{ item.nom }}</h3>
+                            <p class="text-gray-600 mb-2">Prix unitaire: {{ item.prix|floatformat:2 }}€</p>
+                            
+                            <!-- Contrôles de quantité -->
+                            <div class="flex items-center space-x-4 mb-2">
+                                <form method="post" action="{% url 'modifier_quantite_panier' %}" class="flex items-center space-x-2">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="produit_id" value="{{ item.produit_id }}">
+                                    <label class="text-sm text-gray-500">Quantité:</label>
+                                    <input type="number" name="quantite" value="{{ item.quantite }}" 
+                                           min="1" max="99" 
+                                           class="w-16 px-2 py-1 border border-gray-300 rounded text-center"
+                                           onchange="this.form.submit()">
+                                </form>
+                                <span class="text-lg font-semibold text-primary">{{ item.total|floatformat:2 }}€</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col space-y-2">
+                            <a href="{% url 'supprimer_panier' item.produit_id %}" 
+                               class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center"
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                                <i class='bx bx-trash mr-2'></i>Supprimer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Bouton vider le panier -->
+                <div class="text-center">
+                    <a href="{% url 'vider_panier' %}" 
+                       class="inline-flex items-center bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors"
+                       onclick="return confirm('Êtes-vous sûr de vouloir vider le panier ?')">
+                        <i class='bx bx-trash mr-2'></i>
+                        Vider le panier
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Résumé commande -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-4">
+                    <h2 class="text-xl font-bold text-dark mb-6 flex items-center">
+                        <i class='bx bx-receipt mr-2'></i>Résumé de commande
+                    </h2>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Sous-total:</span>
+                            <span class="font-semibold">{{ total_panier|floatformat:2 }}€</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Livraison:</span>
+                            <span class="font-semibold text-green-500">Gratuite</span>
+                        </div>
+                        <hr class="border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">Total:</span>
+                            <span class="text-2xl font-bold text-primary">{{ total_panier|floatformat:2 }}€</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        {% if whatsapp_url %}
+                        <a href="{{ whatsapp_url }}" target="_blank"
+                           class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-lg hover:shadow-lg transition-all duration-300 text-center block font-semibold flex items-center justify-center">
+                            <i class='bx bxl-whatsapp mr-2 text-xl'></i>
+                            Commander via WhatsApp
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'accueil' %}" 
+                           class="w-full border-2 border-primary text-primary py-4 px-6 rounded-lg hover:bg-primary hover:text-white transition-all duration-300 text-center block font-semibold flex items-center justify-center">
+                            <i class='bx bx-shopping-bag mr-2'></i>
+                            Continuer mes achats
+                        </a>
+                    </div>
+                    
+                    <!-- Garanties -->
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h3 class="font-semibold text-dark mb-4">Nos garanties</h3>
+                        <div class="space-y-3 text-sm text-gray-600">
+                            <div class="flex items-center">
+                                <i class='bx bx-shield-check text-green-500 mr-2'></i>
+                                Paiement sécurisé
+                            </div>
+                            <div class="flex items-center">
+                                <i class='bx bx-truck text-blue-500 mr-2'></i>
+                                Livraison rapide
+                            </div>
+                            <div class="flex items-center">
+                                <i class='bx bx-support text-purple-500 mr-2'></i>
+                                Support 24/7
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+<!-- Panier vide -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="bg-white rounded-2xl shadow-lg p-12">
+            <div class="w-32 h-32 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-8">
+                <i class='bx bx-cart text-white text-6xl'></i>
+            </div>
+            <h2 class="text-3xl font-bold text-dark mb-4">Votre panier est vide</h2>
+            <p class="text-xl text-gray-600 mb-8">Découvrez nos produits et commencez vos achats</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'accueil' %}" 
+                   class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                    <i class='bx bx-shopping-bag mr-2'></i>
+                    Découvrir nos produits
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
